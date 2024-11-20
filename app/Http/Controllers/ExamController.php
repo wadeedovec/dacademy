@@ -1,23 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\Models\Exam;
+use App\Models\Response;
 use Illuminate\Http\Request;
-use Spatie\Permission\Middleware\Middleware;
 class ExamController extends Controller
 {
     //
-    public static function middleware(): array
-    {
-        return [
-            // examples with aliases, pipe-separated names, guards, etc:
-            'role_or_permission:manager|edit articles',
-            new Middleware('role:author', only: ['index']),
-            new Middleware(\Spatie\Permission\Middleware\RoleMiddleware::using('manager'), except: ['show']),
-            new Middleware(\Spatie\Permission\Middleware\PermissionMiddleware::using('delete records,api'), only: ['destroy']),
-        ];
-    }
     public function index()
     {
         $exams = Exam::all();
@@ -25,7 +13,21 @@ class ExamController extends Controller
     }
     public function show(Exam $exam)
     {
-        return view('exams.exam', compact('exam'));
+        $userResponses = $exam->responses()
+            ->where('user_id', auth('web')->id())
+            ->pluck('answer', 'question_id');
+        return view('exams.exam', compact('exam', 'userResponses'));
     }
-    public function create() {}
+    public function submit(Request $request, Exam $exam)
+    {
+        foreach ($request->answers as $questionId => $answer) {
+            Response::create([
+                'user_id' => auth('web')->id(),
+                'question_id' => $questionId,
+                'answer' => $answer,
+                'exam_id' => $exam->id,
+            ]);
+        }
+        return redirect()->route('exams.index', $exam->id)->with('success', 'Your answers have been submitted!');
+    }
 }
