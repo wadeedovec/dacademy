@@ -31,6 +31,10 @@ class DashboardController extends Controller
             return [$category => $score];
         });
 
-        return view('dashboard', compact('categories', 'categoryScores'));
+        return view('dashboard', [
+            'categories' => $categories->values(), 
+            'categoryScores' => $categoryScores->values() 
+        ]);
+        
     }
 }
