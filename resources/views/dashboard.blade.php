@@ -17,10 +17,10 @@
                         const radarChart = new Chart(ctx, {
                             type: 'radar',
                             data: {
-                                labels: {!! json_encode($categories) !!}, // Categories
+                                labels: {!! json_encode($categories) !!},
                                 datasets: [{
                                     label: 'Scores',
-                                    data: {!! json_encode($categoryScores) !!}, // Scores
+                                    data: {!! json_encode($categoryScores) !!}, 
                                     backgroundColor: 'rgba(75, 192, 192, 0.2)',
                                     borderColor: 'rgba(75, 192, 192, 1)',
                                     borderWidth: 2

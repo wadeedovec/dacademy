@@ -11,13 +11,10 @@ class DashboardController extends Controller
 {
     public function chart()
     {
-        // Get the specific exam by name
-        $exam = Exam::where('name', 'Personality Test')->firstOrFail();
+        $exam = Exam::where('id', 1)->firstOrFail();
 
-        // Get unique categories of the questions
         $categories = $exam->questions->pluck('category')->unique();
 
-        // Calculate scores for each category based on user responses
         $categoryScores = $categories->mapWithKeys(function ($category) use ($exam) {
             $score = $exam->questions
                 ->where('category', $category)

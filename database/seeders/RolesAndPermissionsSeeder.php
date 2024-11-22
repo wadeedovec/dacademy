@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RolesAndPermissionsSeeder extends Seeder
 {
@@ -15,10 +16,18 @@ class RolesAndPermissionsSeeder extends Seeder
     public function run(): void
     {
         //
+        // Reset cached roles and permissions
+        app()[PermissionRegistrar::class]->forgetCachedPermissions();
         // Create Permissions
-        Permission::create(['name' => 'create exams']);
-        Permission::create(['name' => 'edit exams']);
-        Permission::create(['name' => 'delete exams']);
+        Permission::create(['name' => 'create-exam']);
+        Permission::create(['name' => 'edit-exam']);
+        Permission::create(['name' => 'delete-exam']);
+        Permission::create(['name' => 'view-exam']);
+        Permission::create(['name' => 'perform-exam']);
+        Permission::create(['name' => 'create-user']);
+        Permission::create(['name' => 'edit-user']);
+        Permission::create(['name' => 'view-user']);
+        Permission::create(['name' => 'delete-user']);
 
         // Create Roles
         $adminRole = Role::create(['name' => 'admin']);
@@ -26,6 +35,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $userRole = Role::create(['name' => 'user']);
 
         // Assign Permissions to Admin Role
-        $adminRole->givePermissionTo(['create exams', 'edit exams', 'delete exams']);
+        $adminRole->givePermissionTo(['create-exam', 'edit-exam', 'delete-exam', 'view-exam', 'create-user', 'edit-user', 'view-user', 'delete-user']);
+        $userRole->givePermissionTo('view-exam','perform-exam');
     }
 }
