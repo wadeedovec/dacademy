@@ -1,8 +1,10 @@
 <?php
+
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -18,5 +20,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::resource('exams', ExamController::class);
     Route::post('/exam/{exam}/submit', [ExamController::class, 'submit'])->name('exam.submit');
+    Route::get('/exams/{exam}/questions/create', [ExamController::class, 'createQuestions'])->name('exams.questions.create');
+    Route::post('/exams/{exam}/questions', [ExamController::class, 'storeQuestions'])->name('exams.questions.store');
+    Route::get('/exams/{exam}/edit', [ExamController::class, 'edit'])->name('exams.edit');
+    Route::put('/exams/{exam}', [ExamController::class, 'update'])->name('exams.update');
 });
 require __DIR__ . '/auth.php';
