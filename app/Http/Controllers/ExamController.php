@@ -7,6 +7,8 @@ use App\Models\Response;
 use Illuminate\Http\Request;
 use App\Models\Question;
 use PhpParser\Node\Expr\FuncCall;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class ExamController extends Controller
 {
@@ -41,7 +43,7 @@ class ExamController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
-        $exam = Exam::create([
+        Exam::create([
             'name' => $request->input('name'),
             'description' => $request->input('description'),
         ]);
